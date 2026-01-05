@@ -12,6 +12,7 @@ class TopProductsWidget extends BaseWidget
     protected static ?string $heading = 'Top 5 Productos Vendidos - Últimos 30 días';
     protected static ?int $sort = 4;
     protected static ?string $maxContentWidth = 'full';
+    protected ?string $pollingInterval = '5s';
 
     public function getColumnSpan(): int | string | array
     {

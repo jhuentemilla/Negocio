@@ -30,6 +30,7 @@ class PermissionService
                 'roles',
                 'permissions',
                 'sales_reports',
+                'cash_registers',
             ];
         }
 

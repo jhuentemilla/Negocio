@@ -14,6 +14,7 @@ class LowStockWidget extends BaseWidget
     protected static ?string $heading = 'Productos con Bajo Stock';
     protected static ?int $sort = 3;
     protected static ?string $maxContentWidth = 'full';
+    protected ?string $pollingInterval = '5s';
 
     public function getColumnSpan(): int | string | array
     {

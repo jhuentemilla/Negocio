@@ -35,6 +35,8 @@ class PermissionResource extends Resource
 
     protected static string|\UnitEnum|null $navigationGroup = 'Administración';
 
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShieldExclamation;
+
     public static function shouldRegisterNavigation(): bool
     {
         return PermissionService::hasAccessToResource('permissions');
@@ -64,6 +66,7 @@ class PermissionResource extends Resource
                                 'roles' => 'Roles',
                                 'permissions' => 'Permisos',
                                 'sales_reports' => 'Reportes de Ventas',
+                                'cash_registers' => 'Caja',
                             ])
                             ->multiple()
                             ->searchable()

@@ -14,6 +14,8 @@ class Sale extends Model
         'notes',
         'status',
         'sold_at',
+        'payment_method',
+        'cash_register_id',
     ];
 
     protected $casts = [

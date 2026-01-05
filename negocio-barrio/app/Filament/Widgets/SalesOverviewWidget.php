@@ -12,6 +12,7 @@ class SalesOverviewWidget extends BaseWidget
 {
     protected static ?int $sort = 1;
     protected static ?string $maxContentWidth = 'full';
+    protected ?string $pollingInterval = '5s';
 
     protected function getStats(): array
     {
