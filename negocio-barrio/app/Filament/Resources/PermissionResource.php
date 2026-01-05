@@ -123,7 +123,6 @@ class PermissionResource extends Resource
                 DeleteAction::make(),
             ])
             ->toolbarActions([
-                CreateAction::make(),
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),

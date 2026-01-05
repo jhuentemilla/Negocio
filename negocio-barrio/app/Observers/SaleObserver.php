@@ -3,9 +3,28 @@
 namespace App\Observers;
 
 use App\Models\Sale;
+use App\Models\CashRegister;
 
 class SaleObserver
 {
+    /**
+     * Handle the Sale "creating" event.
+     */
+    public function creating(Sale $sale): void
+    {
+        // Si no está asignada caja, buscar la caja abierta del usuario
+        if (!$sale->cash_register_id && $sale->user_id) {
+            $openRegister = CashRegister::where('user_id', $sale->user_id)
+                ->where('status', 'open')
+                ->latest()
+                ->first();
+
+            if ($openRegister) {
+                $sale->cash_register_id = $openRegister->id;
+            }
+        }
+    }
+
     /**
      * Handle the Sale "created" event.
      */

@@ -28,6 +28,11 @@ class Sale extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function cashRegister(): BelongsTo
+    {
+        return $this->belongsTo(CashRegister::class);
+    }
+
     public function items(): HasMany
     {
         return $this->hasMany(SaleItem::class);
