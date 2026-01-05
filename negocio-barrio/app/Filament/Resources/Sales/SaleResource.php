@@ -13,9 +13,13 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use App\Filament\Traits\HasPermissionGuard;
+use App\Services\PermissionService;
 
 class SaleResource extends Resource
 {
+    use HasPermissionGuard;
+
     protected static ?string $model = Sale::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCurrencyDollar;
@@ -25,6 +29,13 @@ class SaleResource extends Resource
     protected static ?string $modelLabel = 'Venta';
 
     protected static ?string $pluralModelLabel = 'Ventas';
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Negocio';
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return PermissionService::hasAccessToResource('sales');
+    }
 
     public static function form(Schema $schema): Schema
     {

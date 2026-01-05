@@ -46,10 +46,20 @@ class SaleForm
                             ->schema([
                                 Select::make('product_id')
                                     ->label('Producto')
-                                    ->relationship('product', 'name')
                                     ->required()
+                                    ->searchable()
                                     ->preload()
                                     ->live()
+                                    ->getSearchResultsUsing(fn (string $search) => \App\Models\Product::where('is_active', true)
+                                        ->where(function ($q) use ($search) {
+                                            $q->where('name', 'like', "%{$search}%")
+                                                ->orWhere('code', 'like', "%{$search}%")
+                                                ->orWhere('sku', 'like', "%{$search}%");
+                                        })
+                                        ->limit(10)
+                                        ->pluck('name', 'id'))
+                                    ->getOptionLabelUsing(fn ($value) => \App\Models\Product::find($value)?->name)
+                                    ->helperText('Busca por nombre, código o SKU')
                                     ->afterStateUpdated(function ($state, $set) {
                                         if ($state) {
                                             $product = \App\Models\Product::find($state);

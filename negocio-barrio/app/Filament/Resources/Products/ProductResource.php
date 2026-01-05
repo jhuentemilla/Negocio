@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use App\Services\PermissionService;
 
 class ProductResource extends Resource
 {
@@ -27,6 +28,13 @@ class ProductResource extends Resource
     protected static ?string $pluralModelLabel = 'Productos';
 
     protected static ?string $recordTitleAttribute = 'name';
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Negocio';
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return PermissionService::hasAccessToResource('products');
+    }
 
     public static function form(Schema $schema): Schema
     {

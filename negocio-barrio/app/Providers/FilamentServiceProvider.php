@@ -17,6 +17,8 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Filament\Navigation\NavigationGroup;
+use App\Services\PermissionService;
 
 class FilamentServiceProvider extends PanelProvider
 {
@@ -37,6 +39,14 @@ class FilamentServiceProvider extends PanelProvider
                 AccountWidget::class,
                 FilamentInfoWidget::class,
             ])
+            ->navigationGroups([
+                NavigationGroup::make()
+                    ->label('Negocio'),
+                NavigationGroup::make()
+                    ->label('Gestión'),
+                NavigationGroup::make()
+                    ->label('Administración'),
+            ])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -51,5 +61,32 @@ class FilamentServiceProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ]);
+    }
+
+    private function getFilteredNavigationItems(): array
+    {
+        // Mapping de recursos a identificadores de navegación
+        $resourceMapping = [
+            'sales' => 'resources.sales',
+            'products' => 'resources.products',
+            'categories' => 'resources.categories',
+            'stock_movements' => 'resources.stock-movements',
+            'users' => 'resources.users',
+            'roles' => 'resources.roles',
+            'permissions' => 'resources.permissions',
+            'sales_reports' => 'pages.sales-reports',
+        ];
+
+        $allowedResources = PermissionService::getAllowedResources();
+        $items = [];
+
+        foreach ($resourceMapping as $resource => $identifier) {
+            if (in_array($resource, $allowedResources)) {
+                // El recurso está permitido, se mostrará
+                // No necesitamos hacer nada especial
+            }
+        }
+
+        return $items;
     }
 }

@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use App\Services\PermissionService;
 
 class StockMovementResource extends Resource
 {
@@ -23,6 +24,13 @@ class StockMovementResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClock;
 
     protected static ?string $modelLabel = 'Movimiento';
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Negocio';
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return PermissionService::hasAccessToResource('stock_movements');
+    }
 
     public static function form(Schema $schema): Schema
     {

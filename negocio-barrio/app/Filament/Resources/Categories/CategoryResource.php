@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use App\Services\PermissionService;
 
 class CategoryResource extends Resource
 {
@@ -27,6 +28,13 @@ class CategoryResource extends Resource
     protected static ?string $pluralModelLabel = 'Categorías';
 
     protected static ?string $recordTitleAttribute = 'name';
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Negocio';
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return PermissionService::hasAccessToResource('categories');
+    }
 
     public static function form(Schema $schema): Schema
     {
