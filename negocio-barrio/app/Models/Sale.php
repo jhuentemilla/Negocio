@@ -38,27 +38,6 @@ class Sale extends Model
         return $this->hasMany(SaleItem::class);
     }
 
-    protected static function booted(): void
-    {
-        static::creating(function (Sale $sale) {
-            // Si ya trae caja (ej: asignada manualmente), no hacemos nada
-            if ($sale->cash_register_id) {
-                return;
-            }
-
-            // Buscamos la caja abierta del usuario que está vendiendo
-            $activeRegister = CashRegister::where('user_id', $sale->user_id)
-                ->where('status', 'open')
-                ->latest()
-                ->first();
-
-            // Asignamos la venta a esa caja
-            if ($activeRegister) {
-                $sale->cash_register_id = $activeRegister->id;
-            }
-        });
-    }
-
     public function calculateTotal(): void
     {
         $this->total = $this->items->sum('subtotal');

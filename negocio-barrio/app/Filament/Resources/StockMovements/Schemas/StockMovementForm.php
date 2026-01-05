@@ -8,6 +8,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
 use App\Models\Product;
+use Filament\Schemas\Components\Utilities\Get;
 
 class StockMovementForm
 {
@@ -29,7 +30,26 @@ class StockMovementForm
                                 'salida' => 'Salida',
                             ])
                             ->default('entrada')
-                            ->required(),
+                            ->required()
+                            ->live(),
+                        Select::make('category')
+                            ->label('Categoría')
+                            ->options(fn (Get $get) => match($get('type')) {
+                                'entrada' => [
+                                    'compra' => 'Compra a proveedor',
+                                    'devolucion_cliente' => 'Devolución de cliente',
+                                    'ajuste' => 'Ajuste de inventario',
+                                ],
+                                'salida' => [
+                                    'perdida' => 'Pérdida/Rotura',
+                                    'devolucion_proveedor' => 'Devolución a proveedor',
+                                    'ajuste' => 'Ajuste de inventario',
+                                ],
+                                default => [],
+                            })
+                            ->visible(fn (Get $get) => filled($get('type')))
+                            ->required()
+                            ->live(),
                         TextInput::make('quantity')
                             ->label('Cantidad')
                             ->type('number')

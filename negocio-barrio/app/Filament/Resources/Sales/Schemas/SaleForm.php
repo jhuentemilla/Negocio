@@ -8,8 +8,10 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Hidden;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Facades\Filament;
 
 class SaleForm
 {
@@ -17,6 +19,9 @@ class SaleForm
     {
         return $schema
             ->components([
+                Hidden::make('user_id')
+                    ->default(fn () => Filament::auth()->id())
+                    ->required(),
                 Section::make('Información de Venta')
                     ->columns(2)
                     ->schema([

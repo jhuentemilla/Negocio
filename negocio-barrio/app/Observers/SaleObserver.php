@@ -12,8 +12,8 @@ class SaleObserver
      */
     public function creating(Sale $sale): void
     {
-        // Si no está asignada caja, buscar la caja abierta del usuario
-        if (!$sale->cash_register_id && $sale->user_id) {
+        // Fallback: Solo intenta asignar caja si NO trae una y SI tiene usuario asignado
+        if (is_null($sale->cash_register_id) && !is_null($sale->user_id)) {
             $openRegister = CashRegister::where('user_id', $sale->user_id)
                 ->where('status', 'open')
                 ->latest()

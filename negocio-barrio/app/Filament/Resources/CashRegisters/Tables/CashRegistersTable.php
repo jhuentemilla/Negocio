@@ -32,7 +32,9 @@ class CashRegistersTable
                     ->sortable(),
                 TextColumn::make('difference')
                     ->label('Diferencia')
-                    ->numeric()
+                    ->numeric(decimalPlaces: 2)
+                    ->color(fn (string $state): string => (float)$state < 0 ? 'danger' : 'success')
+                    ->weight('bold')
                     ->sortable(),
                 TextColumn::make('status')
                     ->label('Estado'),

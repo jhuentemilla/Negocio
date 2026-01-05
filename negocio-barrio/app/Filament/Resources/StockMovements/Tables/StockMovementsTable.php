@@ -37,6 +37,23 @@ class StockMovementsTable
                         'salida' => 'Salida',
                         default => $state,
                     }),
+                TextColumn::make('category')
+                    ->label('Categoría')
+                    ->formatStateUsing(fn ($state) => match($state) {
+                        'compra' => 'Compra a proveedor',
+                        'devolucion_cliente' => 'Devolución de cliente',
+                        'perdida' => 'Pérdida/Rotura',
+                        'devolucion_proveedor' => 'Devolución a proveedor',
+                        'ajuste' => 'Ajuste de inventario',
+                        default => $state,
+                    })
+                    ->badge()
+                    ->colors([
+                        'info' => 'compra',
+                        'warning' => fn ($state) => in_array($state, ['devolucion_cliente', 'devolucion_proveedor']),
+                        'danger' => 'perdida',
+                        'gray' => 'ajuste',
+                    ]),
                 TextColumn::make('quantity')
                     ->label('Cantidad')
                     ->sortable(),
@@ -57,6 +74,15 @@ class StockMovementsTable
                     ->options([
                         'entrada' => 'Entrada',
                         'salida' => 'Salida',
+                    ]),
+                SelectFilter::make('category')
+                    ->label('Categoría')
+                    ->options([
+                        'compra' => 'Compra a proveedor',
+                        'devolucion_cliente' => 'Devolución de cliente',
+                        'perdida' => 'Pérdida/Rotura',
+                        'devolucion_proveedor' => 'Devolución a proveedor',
+                        'ajuste' => 'Ajuste de inventario',
                     ]),
             ])
             ->recordActions([
