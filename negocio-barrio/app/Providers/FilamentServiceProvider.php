@@ -29,6 +29,7 @@ class FilamentServiceProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->brandName('Proyecto-NegociosBarrio')
             ->colors([
                 'primary' => Color::Amber,
             ])
