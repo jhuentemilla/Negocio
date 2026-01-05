@@ -31,11 +31,27 @@ class ProductForm
                             ->maxLength(255),
                         TextInput::make('sku')
                             ->label('SKU')
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->helperText('Se genera automáticamente según la categoría')
+                            ->disabled()
+                            ->dehydrated(),
                         Select::make('category_id')
                             ->label('Categoría')
                             ->required()
-                            ->options(Category::where('is_active', true)->pluck('name', 'id')),
+                            ->options(Category::where('is_active', true)->pluck('name', 'id'))
+                            ->live()
+                            ->afterStateUpdated(function ($state, $set) {
+                                if ($state) {
+                                    $category = Category::find($state);
+                                    $prefix = $category ? substr(strtoupper($category->name), 0, 3) : 'GEN';
+                                    $lastProduct = \App\Models\Product::where('category_id', $state)
+                                        ->orderBy('id', 'desc')
+                                        ->first();
+                                    $nextNumber = ($lastProduct ? (int)substr($lastProduct->sku, -4) : 0) + 1;
+                                    $sku = $prefix . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+                                    $set('sku', $sku);
+                                }
+                            }),
                     ]),
                 Section::make('Detalles del Producto')
                     ->columns(2)

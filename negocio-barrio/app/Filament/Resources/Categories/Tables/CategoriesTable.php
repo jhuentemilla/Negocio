@@ -23,7 +23,7 @@ class CategoriesTable
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('slug')
-                    ->label('Slug')
+                    ->label('Nombre en URL')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('description')

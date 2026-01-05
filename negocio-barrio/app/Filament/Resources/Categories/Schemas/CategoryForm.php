@@ -25,9 +25,10 @@ class CategoryForm
                             ->live(onBlur: true)
                             ->afterStateUpdated(fn (string $state, callable $set) => $set('slug', Str::slug($state))),
                         TextInput::make('slug')
-                            ->label('Slug')
+                            ->label('Nombre en URL')
                             ->required()
                             ->maxLength(255)
+                            ->helperText('Se genera automáticamente. Ej: electronica-hogar')
                             ->unique(table: 'categories', column: 'slug', ignoreRecord: true),
                     ]),
                 Section::make('Descripción')
