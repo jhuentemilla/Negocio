@@ -31,6 +31,7 @@ class SalesReports extends Page implements HasTable
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedChartBar;
     protected static string|\UnitEnum|null $navigationGroup = 'Gestión';
     protected string $view = 'filament.pages.sales-reports';
+    protected static ?string $title = 'Reportes de Ventas';
 
     public ?array $filterData = [];
 
@@ -54,6 +55,14 @@ class SalesReports extends Page implements HasTable
                         })
                         ->when($this->filterData['start_date'] ?? null, fn (Builder $q) => $q->whereDate('created_at', '>=', $this->filterData['start_date']))
                         ->when($this->filterData['end_date'] ?? null, fn (Builder $q) => $q->whereDate('created_at', '<=', $this->filterData['end_date']))
+                        ->when($this->filterData['search'] ?? null, function (Builder $q) {
+                            $search = $this->filterData['search'];
+                            return $q->where(function (Builder $qb) use ($search) {
+                                $qb->where('id', 'like', '%' . $search . '%')
+                                   ->orWhere('total', 'like', '%' . $search . '%')
+                                   ->orWhereHas('user', fn (Builder $u) => $u->where('name', 'like', '%' . $search . '%'));
+                            });
+                        })
                         ->orderBy('created_at', 'desc')
                         ->get();
 
@@ -117,7 +126,7 @@ class SalesReports extends Page implements HasTable
         return $schema
             ->schema([
                 Section::make('Filtros de Búsqueda')
-                    ->columns(4)
+                    ->columns(5)
                     ->schema([
                         Select::make('vendor_id')
                             ->label('Vendedor')
@@ -137,6 +146,10 @@ class SalesReports extends Page implements HasTable
                         DatePicker::make('end_date')
                             ->label('Hasta')
                             ->live(),
+                        \Filament\Forms\Components\TextInput::make('search')
+                            ->label('Buscar')
+                            ->placeholder('ID, Vendedor...')
+                            ->live(),
                     ]),
             ]);
     }
@@ -153,6 +166,14 @@ class SalesReports extends Page implements HasTable
                     })
                     ->when($this->filterData['start_date'] ?? null, fn (Builder $query) => $query->whereDate('created_at', '>=', $this->filterData['start_date']))
                     ->when($this->filterData['end_date'] ?? null, fn (Builder $query) => $query->whereDate('created_at', '<=', $this->filterData['end_date']))
+                    ->when($this->filterData['search'] ?? null, function (Builder $query) {
+                        $search = $this->filterData['search'];
+                        return $query->where(function (Builder $q) use ($search) {
+                            $q->where('id', 'like', '%' . $search . '%')
+                               ->orWhere('total', 'like', '%' . $search . '%')
+                               ->orWhereHas('user', fn (Builder $u) => $u->where('name', 'like', '%' . $search . '%'));
+                        });
+                    })
                     ->orderBy('created_at', 'desc')
             )
             ->columns([

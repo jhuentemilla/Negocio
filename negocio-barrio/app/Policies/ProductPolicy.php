@@ -1,0 +1,66 @@
+<?php
+
+namespace App\Policies;
+
+use App\Models\Product;
+use App\Models\User;
+use App\Services\PermissionService;
+
+class ProductPolicy
+{
+    /**
+     * Determine whether the user can view any models.
+     */
+    public function viewAny(User $user): bool
+    {
+        return PermissionService::hasAccessToResource('products');
+    }
+
+    /**
+     * Determine whether the user can view the model.
+     */
+    public function view(User $user, Product $product): bool
+    {
+        return PermissionService::hasAccessToResource('products');
+    }
+
+    /**
+     * Determine whether the user can create models.
+     */
+    public function create(User $user): bool
+    {
+        return PermissionService::hasPermission($user, 'create_products');
+    }
+
+    /**
+     * Determine whether the user can update the model.
+     */
+    public function update(User $user, Product $product): bool
+    {
+        return PermissionService::hasPermission($user, 'update_products');
+    }
+
+    /**
+     * Determine whether the user can delete the model.
+     */
+    public function delete(User $user, Product $product): bool
+    {
+        return PermissionService::hasPermission($user, 'delete_products');
+    }
+
+    /**
+     * Determine whether the user can restore the model.
+     */
+    public function restore(User $user, Product $product): bool
+    {
+        return false;
+    }
+
+    /**
+     * Determine whether the user can permanently delete the model.
+     */
+    public function forceDelete(User $user, Product $product): bool
+    {
+        return false;
+    }
+}

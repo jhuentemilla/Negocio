@@ -36,6 +36,11 @@ class RoleResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShieldCheck;
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return PermissionService::hasAccessToResource('roles');
+    }
+
     public static function form(Schema $schema): Schema
     {
         return $schema

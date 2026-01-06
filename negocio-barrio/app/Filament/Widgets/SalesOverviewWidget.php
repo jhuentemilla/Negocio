@@ -34,9 +34,9 @@ class SalesOverviewWidget extends BaseWidget
                 ->color('success'),
 
             Stat::make('Ventas Hoy', '$' . number_format($ventasHoy, 2))
-                ->description($porcentajeCambio >= 0 ? '↑ ' : '↓ ' . abs(round($porcentajeCambio, 1)) . '% vs promedio')
+                ->description('Monto vendido hoy')
                 ->icon('heroicon-o-arrow-trending-up')
-                ->color($porcentajeCambio >= 0 ? 'success' : 'warning'),
+                ->color('success'),
 
             Stat::make('Total de Transacciones', (string)$cantidadVentas)
                 ->description('Número de ventas realizadas')

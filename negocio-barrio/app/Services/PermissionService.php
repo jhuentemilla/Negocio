@@ -62,4 +62,26 @@ class PermissionService
         $allowedResources = self::getAllowedResources();
         return in_array($resource, $allowedResources);
     }
+
+    /**
+     * Verifica si el usuario tiene permiso para una acción específica en un recurso
+     * Ejemplo: hasPermission(user, 'update_products')
+     */
+    public static function hasPermission(User $user, string $permission): bool
+    {
+        // Admin tiene todos los permisos
+        if ($user->roles->where('name', 'Admin')->isNotEmpty()) {
+            return true;
+        }
+
+        // Buscar el permiso en los roles del usuario
+        foreach ($user->roles as $role) {
+            $rolePermissions = $role->permissions()->pluck('name')->toArray();
+            if (in_array($permission, $rolePermissions)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
