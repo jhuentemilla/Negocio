@@ -27,13 +27,13 @@ class PermissionResource extends Resource
 
     protected static ?string $navigationLabel = 'Permisos';
 
+    protected static string|\UnitEnum|null $navigationGroup = 'Configuración';
+
+    protected static ?int $navigationSort = 99;
+
     protected static ?string $pluralModelLabel = 'Permisos';
 
     protected static ?string $modelLabel = 'Permiso';
-
-    protected static ?int $navigationSort = 3;
-
-    protected static string|\UnitEnum|null $navigationGroup = 'Administración';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShieldExclamation;
 

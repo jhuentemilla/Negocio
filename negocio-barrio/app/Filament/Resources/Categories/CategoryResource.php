@@ -23,13 +23,15 @@ class CategoryResource extends Resource
 
     protected static ?string $navigationLabel = 'Categorías';
 
+    protected static string|\UnitEnum|null $navigationGroup = 'Inventario';
+
+    protected static ?int $navigationSort = 2;
+
     protected static ?string $modelLabel = 'Categoría';
 
     protected static ?string $pluralModelLabel = 'Categorías';
 
     protected static ?string $recordTitleAttribute = 'name';
-
-    protected static string|\UnitEnum|null $navigationGroup = 'Negocio';
 
     public static function shouldRegisterNavigation(): bool
     {

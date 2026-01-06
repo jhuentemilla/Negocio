@@ -19,17 +19,19 @@ class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCubeTransparent;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCube;
 
     protected static ?string $navigationLabel = 'Productos';
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Inventario';
+
+    protected static ?int $navigationSort = 1;
 
     protected static ?string $modelLabel = 'Producto';
 
     protected static ?string $pluralModelLabel = 'Productos';
 
     protected static ?string $recordTitleAttribute = 'name';
-
-    protected static string|\UnitEnum|null $navigationGroup = 'Negocio';
 
     public static function shouldRegisterNavigation(): bool
     {

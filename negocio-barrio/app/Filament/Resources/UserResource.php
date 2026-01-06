@@ -27,18 +27,14 @@ class UserResource extends Resource
 
     protected static ?string $navigationLabel = 'Usuarios';
 
+    protected static string|\UnitEnum|null $navigationGroup = 'Configuración';
+
+    protected static ?int $navigationSort = 99;
+
     protected static ?string $pluralModelLabel = 'Usuarios';
 
     protected static ?string $modelLabel = 'Usuario';
 
-    protected static ?int $navigationSort = 2;
-
-    protected static string|\UnitEnum|null $navigationGroup = 'Administración';
-
-    public static function shouldRegisterNavigation(): bool
-    {
-        return PermissionService::hasAccessToResource('users');
-    }
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
 

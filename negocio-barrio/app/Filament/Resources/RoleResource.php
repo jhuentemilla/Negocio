@@ -25,18 +25,14 @@ class RoleResource extends Resource
 
     protected static ?string $navigationLabel = 'Roles';
 
+    protected static string|\UnitEnum|null $navigationGroup = 'Configuración';
+
+    protected static ?int $navigationSort = 99;
+
     protected static ?string $pluralModelLabel = 'Roles';
 
     protected static ?string $modelLabel = 'Rol';
 
-    protected static ?int $navigationSort = 1;
-
-    protected static string|\UnitEnum|null $navigationGroup = 'Administración';
-
-    public static function shouldRegisterNavigation(): bool
-    {
-        return PermissionService::hasAccessToResource('roles');
-    }
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShieldCheck;
 

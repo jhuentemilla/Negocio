@@ -19,9 +19,9 @@ class CashRegisterResource extends Resource
 {
     protected static ?string $model = CashRegister::class;
 
-    protected static ?string $navigationLabel = 'Caja';
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCurrencyDollar;
-    protected static string|\UnitEnum|null $navigationGroup = 'Gestión';
+    protected static ?string $navigationLabel = 'Caja y Turnos';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalculator;
+    protected static string|\UnitEnum|null $navigationGroup = 'Caja y Ventas';
     protected static ?int $navigationSort = 2;
 
     public static function shouldRegisterNavigation(): bool

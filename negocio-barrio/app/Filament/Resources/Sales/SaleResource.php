@@ -22,15 +22,17 @@ class SaleResource extends Resource
 
     protected static ?string $model = Sale::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCurrencyDollar;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShoppingCart;
 
-    protected static ?string $navigationLabel = 'Ventas';
+    protected static ?string $navigationLabel = 'Nueva Venta';
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Caja y Ventas';
+
+    protected static ?int $navigationSort = 1;
 
     protected static ?string $modelLabel = 'Venta';
 
     protected static ?string $pluralModelLabel = 'Ventas';
-
-    protected static string|\UnitEnum|null $navigationGroup = 'Negocio';
 
     public static function shouldRegisterNavigation(): bool
     {
