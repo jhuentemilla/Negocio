@@ -7,6 +7,8 @@ use App\Models\CashRegister;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Notifications\Notification;
 use Filament\Facades\Filament;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
 
 class CreateSale extends CreateRecord
 {
@@ -37,9 +39,36 @@ class CreateSale extends CreateRecord
             $this->halt();
         }
 
-        // 4. ASIGNAR CAJA
+        // 4. VALIDAR STOCK: Verificar que hay suficiente inventario
+        if (isset($data['items']) && is_array($data['items'])) {
+            foreach ($data['items'] as $item) {
+                $product = \App\Models\Product::find($item['product_id']);
+                if ($product && $item['quantity'] > $product->quantity) {
+                    Notification::make()
+                        ->title('Stock Insuficiente')
+                        ->body("Solo hay {$product->quantity} unidades de '{$product->name}'")
+                        ->danger()
+                        ->send();
+
+                    $this->halt();
+                }
+            }
+        }
+
+        // 5. ASIGNAR CAJA
         $data['cash_register_id'] = $activeRegister->id;
 
         return $data;
     }
+
+    /**
+     * Manejar la creación del registro con transacción de base de datos
+     * Asegura que si algo falla, nada se guarda (todo o nada)
+     */
+    protected function handleRecordCreation(array $data): Model
+    {
+        return DB::transaction(function () use ($data) {
+            // Si algo falla aquí, la transacción se revierte automáticamente
+            return static::getModel()::create($data);
+        });    }
 }

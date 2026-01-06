@@ -25,11 +25,6 @@ class SaleForm
                 Section::make('Información de Venta')
                     ->columns(2)
                     ->schema([
-                        Select::make('user_id')
-                            ->label('Vendedor')
-                            ->relationship('user', 'name')
-                            ->required()
-                            ->preload(),
                         DateTimePicker::make('sold_at')
                             ->label('Fecha y Hora')
                             ->required()
@@ -41,30 +36,22 @@ class SaleForm
                             ->prefix('$')
                             ->readOnly()
                             ->columnSpanFull(),
-                    ]),
+                    ])
+                    ->columnSpanFull(),
                 Section::make('Productos')
                     ->schema([
                         Repeater::make('items')
-                            ->label('Agregar Productos')
                             ->relationship()
-                            ->columns(4)
+                            ->columns(5)
                             ->schema([
                                 Select::make('product_id')
                                     ->label('Producto')
                                     ->required()
+                                    ->options(fn () => \App\Models\Product::where('is_active', true)->pluck('name', 'id'))
                                     ->searchable()
-                                    ->preload()
                                     ->live()
-                                    ->getSearchResultsUsing(fn (string $search) => \App\Models\Product::where('is_active', true)
-                                        ->where(function ($q) use ($search) {
-                                            $q->where('name', 'like', "%{$search}%")
-                                                ->orWhere('code', 'like', "%{$search}%")
-                                                ->orWhere('sku', 'like', "%{$search}%");
-                                        })
-                                        ->limit(10)
-                                        ->pluck('name', 'id'))
-                                    ->getOptionLabelUsing(fn ($value) => \App\Models\Product::find($value)?->name)
-                                    ->helperText('Busca por nombre, código o SKU')
+                                    ->columnSpan(2)
+                                    ->helperText('Busca por nombre')
                                     ->afterStateUpdated(function ($state, $set) {
                                         if ($state) {
                                             $product = \App\Models\Product::find($state);
@@ -79,7 +66,9 @@ class SaleForm
                                     ->required()
                                     ->numeric()
                                     ->minValue(1)
+                                    ->columnSpan(1)
                                     ->live()
+                                    ->helperText('Stock disponible')
                                     ->afterStateUpdated(function ($state, $get, $set) {
                                         $price = $get('unit_price') ?? 0;
                                         $set('subtotal', $state * $price);
@@ -89,6 +78,8 @@ class SaleForm
                                     ->required()
                                     ->numeric()
                                     ->prefix('$')
+                                    ->columnSpan(1)
+                                    ->readOnly()
                                     ->live()
                                     ->afterStateUpdated(function ($state, $get, $set) {
                                         $qty = $get('quantity') ?? 0;
@@ -99,18 +90,21 @@ class SaleForm
                                     ->required()
                                     ->numeric()
                                     ->prefix('$')
+                                    ->columnSpan(1)
                                     ->readOnly(),
                             ])
                             ->minItems(1)
-                            ->addActionLabel('Agregar Producto')
+                            ->addActionLabel('+ Agregar Producto')
                             ->columnSpanFull(),
-                    ]),
+                    ])
+                    ->columnSpanFull(),
                 Section::make('Notas')
                     ->schema([
                         Textarea::make('notes')
                             ->label('Observaciones')
                             ->columnSpanFull(),
-                    ]),
+                    ])
+                    ->columnSpanFull(),
             ]);
     }
 }
